@@ -34,15 +34,28 @@ def insert_row(data):
         connection.close()
     return {"status": "success", "message": "Row inserted successfully"}
 
-@app.route('/insertRows', methods=['POST'])
+@app.route('/insertRows', methods=[''])
 def insert_rows():
-    if request.method == 'POST':
+    if request.method == 'GET':
         data = request.json
         try:
             response = insert_row(data)
             return jsonify(response), 200
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)}), 500
+        
+@app.route('/testdb')
+def test_db():
+    try:
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT 1')  # Simple query to test the connection
+            result = cursor.fetchone()
+            return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+    finally:
+        connection.close()
 
 if __name__ == '__main__':
     import uvicorn
