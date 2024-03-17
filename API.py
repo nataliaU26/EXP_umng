@@ -34,9 +34,9 @@ def insert_row(data):
         connection.close()
     return {"status": "success", "message": "Row inserted successfully"}
 
-@app.route('/insertRows', methods=[''])
+@app.route('/insertRows', methods=['POST'])
 def insert_rows():
-    if request.method == 'GET':
+    if request.method == 'POST':
         data = request.json
         try:
             response = insert_row(data)
