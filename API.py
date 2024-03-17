@@ -44,7 +44,7 @@ def insert_rows():
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)}), 500
         
-@app.route('/testdb')
+@app.route('/testdb', methods=['POST'])
 def test_db():
     try:
         connection = get_db_connection()
