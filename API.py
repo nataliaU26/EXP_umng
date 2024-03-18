@@ -16,6 +16,10 @@ db_config = {
     'cursorclass': pymysql.cursors.DictCursor
 }
 
+@app.route("/")
+def helloWorld():
+  return "Hello, cross-origin-world!"
+
 def get_db_connection():
     connection = pymysql.connect(**db_config)
     return connection
