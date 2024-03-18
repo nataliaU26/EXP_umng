@@ -36,15 +36,21 @@ def insert_row(data):
 
 @app.route('/insertRows', methods=['POST'])
 def insert_rows():
-    if request.method == 'POST':
-        data = request.json
-        try:
-            response = insert_row(data)
-            return jsonify(response), 200
-        except Exception as e:
-            return jsonify({"status": "error", "message": str(e)}), 500
+    connection = get_db_connection()
+    data = request.json
+    try:
+        with connection.cursor() as cursor:
+            sql = '''
+                INSERT INTO DatosExperimento (CONDITION_A, CONDITION_B, GRAPH, timeTaken, Error, controlCondition, timePer)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            '''
+            cursor.execute(sql, (data['CONDITION_A'], data['CONDITION_B'], data['GRAPH'], data['timeTaken'], data['Error'], data['controlCondition'], data['timePer']))
+        connection.commit()
+    finally:
+        connection.close()
+    return {"status": "success", "message": "Row inserted successfully"}
         
-@app.route('/testdb', methods=['POST'])
+@app.route('/testdb')
 def test_db():
     try:
         connection = get_db_connection()
