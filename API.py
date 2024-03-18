@@ -4,7 +4,7 @@ from flask_cors import CORS
 from asgiref.wsgi import WsgiToAsgi
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, origins=['https://ambitious-plant-097b5610f.azurestaticapps.net'], supports_credentials=True)
 asgi_app = WsgiToAsgi(app)
 
 db_config = {
