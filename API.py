@@ -25,7 +25,7 @@ def get_db_connection():
 
 def insertRows():
     data = request.json
-
+    return jsonify({"status": "success", "message": "porfi"})
     connection = get_db_connection()
     try:
         with connection.cursor() as cursor:
