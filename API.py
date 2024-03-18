@@ -4,7 +4,7 @@ from flask_cors import CORS, cross_origin
 from asgiref.wsgi import WsgiToAsgi
 
 app = Flask(__name__)
-CORS(app, origins='*')
+CORS(app, resources={r"/*": {"origins": "https://ambitious-plant-097b5610f.5.azurestaticapps.net"}})
 asgi_app = WsgiToAsgi(app)
 
 db_config = {
@@ -26,7 +26,6 @@ def get_db_connection():
 def insertRows():
     
     data = request.json
-    origin = request.headers.get('Origin')
     connection = get_db_connection()
     try:
         with connection.cursor() as cursor:
