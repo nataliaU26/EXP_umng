@@ -1,10 +1,10 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request,make_response
 import pymysql
 from flask_cors import CORS,cross_origin
 from asgiref.wsgi import WsgiToAsgi
 
 app = Flask(__name__)
-CORS(app, origins=['https://ambitious-plant-097b5610f.5.azurestaticapps.net'])
+CORS(app, origins=['https://ambitious-plant-097b5610f.5.azurestaticapps.net'], supports_credentials=True)
 asgi_app = WsgiToAsgi(app)
 
 db_config = {
@@ -22,6 +22,8 @@ def get_db_connection():
 
 def insert_row(data):
     connection = get_db_connection()
+    
+    
     try:
         with connection.cursor() as cursor:
             sql = '''
@@ -35,10 +37,12 @@ def insert_row(data):
     return {"status": "success", "message": "Row inserted successfully"}
 
 @app.route('/insertRows', methods=['POST'])
-@cross_origin(origin='https://ambitious-plant-097b5610f.5.azurestaticapps.net')
+
 
 def insertRows():
     connection = get_db_connection()
+    response = make_response()
+    response.headers['Access-Control-Allow-Origin'] = 'https://ambitious-plant-097b5610f.azurestaticapps.net'
     data = request.json
     try:
         with connection.cursor() as cursor:
