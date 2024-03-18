@@ -24,9 +24,8 @@ def get_db_connection():
 @app.route('/insertRows', methods=['POST', 'OPTIONS'])
 
 def insertRows():
-    
     data = request.json
-    origin = request.headers.get('Origin')
+
     connection = get_db_connection()
     try:
         with connection.cursor() as cursor:
