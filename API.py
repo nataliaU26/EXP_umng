@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 import pymysql
-from flask_cors import CORS
+from flask_cors import CORS,cross_origin
 from asgiref.wsgi import WsgiToAsgi
 
 app = Flask(__name__)
@@ -35,6 +35,8 @@ def insert_row(data):
     return {"status": "success", "message": "Row inserted successfully"}
 
 @app.route('/insertRows', methods=['POST'])
+@cross_origin(origin='localhost')
+
 def insertRows():
     connection = get_db_connection()
     data = request.json
