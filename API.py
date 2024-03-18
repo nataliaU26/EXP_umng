@@ -42,7 +42,8 @@ def insert_row(data):
 def insertRows():
     connection = get_db_connection()
     response = make_response()
-    response.headers['Access-Control-Allow-Origin'] = 'https://ambitious-plant-097b5610f.azurestaticapps.net'
+    response.headers['Access-Control-Allow-Origin'] = 'https://ambitious-plant-097b5610f.5.azurestaticapps.net/respuesta'
+    response.headers['Access-Control-Allow-Origin'] = 'https://ambitious-plant-097b5610f.5.azurestaticapps.net'
     data = request.json
     try:
         with connection.cursor() as cursor:
