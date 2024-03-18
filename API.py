@@ -24,20 +24,36 @@ def get_db_connection():
 @app.route('/insertRows', methods=['POST', 'OPTIONS'])
 
 def insertRows():
-    data = request.json
-    return jsonify({"status": "success", "message": "porfi"})
-    connection = get_db_connection()
-    try:
-        with connection.cursor() as cursor:
-            sql = '''
-                INSERT INTO DatosExperimento (CONDITION_A, CONDITION_B, GRAPH, timeTaken, Error, controlCondition, timePer)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
-            '''
-            cursor.execute(sql, (data['CONDITION_A'], data['CONDITION_B'], data['GRAPH'], data['timeTaken'], data['Error'], data['controlCondition'], data['timePer']))
-        connection.commit()
-    finally:
-        connection.close()
-    return jsonify({"status": "success", "message": "Row inserted successfully"})
+    if request.method == 'POST':
+        data = request.json
+        
+        if not data:
+            return jsonify({"status": "error", "message": "No data provided"}), 400
+        
+        # Validación de datos
+        required_fields = ['CONDITION_A', 'CONDITION_B', 'GRAPH', 'timeTaken', 'Error', 'controlCondition', 'timePer']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({"status": "error", "message": f"Field '{field}' is required"}), 400
+        
+        connection = get_db_connection()
+        try:
+            with connection.cursor() as cursor:
+                sql = '''
+                    INSERT INTO DatosExperimento (CONDITION_A, CONDITION_B, GRAPH, timeTaken, Error, controlCondition, timePer)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                '''
+                cursor.execute(sql, (data['CONDITION_A'], data['CONDITION_B'], data['GRAPH'], data['timeTaken'], data['Error'], data['controlCondition'], data['timePer']))
+            connection.commit()
+        except Exception as e:
+            return jsonify({"status": "error", "message": f"Failed to insert row: {str(e)}"}), 500
+        finally:
+            connection.close()
+        
+        return jsonify({"status": "success", "message": "Row inserted successfully"})
+    
+    return jsonify({"status": "error", "message": "Unsupported method"}), 405
+
 
 @app.route('/testdb')
 def test_db():
