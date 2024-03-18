@@ -40,6 +40,7 @@ def insert_row(data):
 
 
 def insertRows():
+    return jsonify({"status": "error", "message": "uwu"}), 403
     connection = get_db_connection()
     data = request.json
     origin = request.headers.get('Origin')
