@@ -1,10 +1,10 @@
-from flask import Flask, jsonify, request,make_response
+from flask import Flask, jsonify, request, make_response
 import pymysql
-from flask_cors import CORS,cross_origin
+from flask_cors import CORS, cross_origin
 from asgiref.wsgi import WsgiToAsgi
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins='*')
 asgi_app = WsgiToAsgi(app)
 
 db_config = {
@@ -20,10 +20,14 @@ def get_db_connection():
     connection = pymysql.connect(**db_config)
     return connection
 
-def insert_row(data):
+
+@app.route('/insertRows', methods=['POST', 'OPTIONS'])
+
+def insertRows():
+    
+    data = request.json
+    origin = request.headers.get('Origin')
     connection = get_db_connection()
-    
-    
     try:
         with connection.cursor() as cursor:
             sql = '''
@@ -34,33 +38,8 @@ def insert_row(data):
         connection.commit()
     finally:
         connection.close()
-    return {"status": "success", "message": "Row inserted successfully"}
+    return jsonify({"status": "success", "message": "Row inserted successfully"})
 
-@app.route('/insertRows', methods=['POST'])
-
-
-def insertRows():
-    return jsonify({"status": "error", "message": "uwu"}), 403
-    connection = get_db_connection()
-    data = request.json
-    origin = request.headers.get('Origin')
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    
-    
-            try:
-                with connection.cursor() as cursor:
-                    sql = '''
-                        INSERT INTO DatosExperimento (CONDITION_A, CONDITION_B, GRAPH, timeTaken, Error, controlCondition, timePer)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s)
-                    '''
-                    cursor.execute(sql, (data['CONDITION_A'], data['CONDITION_B'], data['GRAPH'], data['timeTaken'], data['Error'], data['controlCondition'], data['timePer']))
-                connection.commit()
-            finally:
-                connection.close()
-            return {"status": "success", "message": "Row inserted successfully"}
-        
-        return jsonify({"status": "error", "message": "Invalid origin"}), 403
-        
 @app.route('/testdb')
 def test_db():
     try:
@@ -76,7 +55,7 @@ def test_db():
 
 @app.route("/")
 def helloWorld():
-  return "Hello, cross-origin-world!"
+    return "Hello, cross-origin-world!"
 
 if __name__ == '__main__':
     import uvicorn
