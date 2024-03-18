@@ -4,7 +4,7 @@ from flask_cors import CORS,cross_origin
 from asgiref.wsgi import WsgiToAsgi
 
 app = Flask(__name__)
-CORS(app, origins=['https://ambitious-plant-097b5610f.azurestaticapps.net'], supports_credentials=True)
+CORS(app, origins=['https://ambitious-plant-097b5610f.5.azurestaticapps.net'])
 asgi_app = WsgiToAsgi(app)
 
 db_config = {
@@ -35,7 +35,7 @@ def insert_row(data):
     return {"status": "success", "message": "Row inserted successfully"}
 
 @app.route('/insertRows', methods=['POST'])
-@cross_origin(origin='localhost')
+@cross_origin(origin='https://ambitious-plant-097b5610f.5.azurestaticapps.net')
 
 def insertRows():
     connection = get_db_connection()
