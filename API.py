@@ -43,12 +43,8 @@ def insertRows():
     connection = get_db_connection()
     data = request.json
     origin = request.headers.get('Origin')
-    if origin:
-        # Check if the origin is one of your allowed origins
-        if origin == 'https://ambitious-plant-097b5610f.5.azurestaticapps.net':
-            response = jsonify({"status": "success", "message": "Row inserted successfully"})
-            response.headers['Access-Control-Allow-Origin'] = origin
-            response.headers['Access-Control-Allow-Credentials'] = 'true'
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    
     
             try:
                 with connection.cursor() as cursor:
