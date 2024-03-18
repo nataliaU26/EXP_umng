@@ -24,18 +24,18 @@ def get_db_connection():
 @app.route('/insertRows', methods=['POST', 'OPTIONS'])
 
 def insertRows():
-    if request.method == 'POST':
-        data = request.json
-        
-        if not data:
-            return jsonify({"status": "error", "message": "No data provided"}), 400
-        
-        # Validación de datos
-        required_fields = ['CONDITION_A', 'CONDITION_B', 'GRAPH', 'timeTaken', 'Error', 'controlCondition', 'timePer']
-        for field in required_fields:
-            if field not in data:
-                return jsonify({"status": "error", "message": f"Field '{field}' is required"}), 400
-        
+
+    if  request.method == 'POST':
+        #data = request.json
+        data = {
+                'CONDITION_A': 'value_A',
+                'CONDITION_B': 'value_B',
+                'GRAPH': 'value_GRAPH',
+                'timeTaken': 200, # Assuming a number for timeTaken     
+                'Error': 0, # Assuming a number for Error
+                'controlCondition': 'value_control',
+                'timePer': 100 # Assuming a number for timePer
+        }
         connection = get_db_connection()
         try:
             with connection.cursor() as cursor:
@@ -45,15 +45,10 @@ def insertRows():
                 '''
                 cursor.execute(sql, (data['CONDITION_A'], data['CONDITION_B'], data['GRAPH'], data['timeTaken'], data['Error'], data['controlCondition'], data['timePer']))
             connection.commit()
-        except Exception as e:
-            return jsonify({"status": "error", "message": f"Failed to insert row: {str(e)}"}), 500
         finally:
             connection.close()
-        
         return jsonify({"status": "success", "message": "Row inserted successfully"})
-    
-    return jsonify({"status": "error", "message": "Unsupported method"}), 405
-
+    return jsonify({"status": "success", "message": "wtf"})
 
 @app.route('/testdb')
 def test_db():
