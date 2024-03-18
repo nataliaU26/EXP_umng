@@ -26,16 +26,16 @@ def get_db_connection():
 def insertRows():
 
     if  request.method == 'POST':
-        #data = request.json
-        data = {
-                'CONDITION_A': 'value_A',
-                'CONDITION_B': 'value_B',
-                'GRAPH': 'value_GRAPH',
-                'timeTaken': 200, # Assuming a number for timeTaken     
-                'Error': 0, # Assuming a number for Error
-                'controlCondition': 'value_control',
-                'timePer': 100 # Assuming a number for timePer
-        }
+        data = request.json
+        # data = {
+        #         'CONDITION_A': 'value_A',
+        #         'CONDITION_B': 'value_B',
+        #         'GRAPH': 'value_GRAPH',
+        #         'timeTaken': 200, # Assuming a number for timeTaken     
+        #         'Error': 0, # Assuming a number for Error
+        #         'controlCondition': 'value_control',
+        #         'timePer': 100 # Assuming a number for timePer
+        # }
         connection = get_db_connection()
         try:
             with connection.cursor() as cursor:
