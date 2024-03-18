@@ -35,7 +35,7 @@ def insert_row(data):
     return {"status": "success", "message": "Row inserted successfully"}
 
 @app.route('/insertRows', methods=['POST'])
-def insert_rows():
+def insertRows():
     connection = get_db_connection()
     data = request.json
     try:
