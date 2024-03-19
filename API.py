@@ -25,22 +25,28 @@ def get_db_connection():
 
 def insertRows():
 
-    if  request.method == 'POST':
-        data = request.json
-        
-        connection = get_db_connection()
-        try:
-            with connection.cursor() as cursor:
-                sql = '''
-                    INSERT INTO DatosExperimento (CONDITION_A, CONDITION_B, GRAPH, timeTaken, Error, controlCondition, timePer)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)
-                '''
-                cursor.execute(sql, (data['CONDITION_A'], data['CONDITION_B'], data['GRAPH'], data['timeTaken'], data['Error'], data['controlCondition'], data['timePer']))
-            connection.commit()
-        finally:
-            connection.close()
+
+    try:
+        connect = get_db_connection()
         return jsonify({"status": "success", "message": "Row inserted successfully"})
-    return jsonify({"status": "success", "message": "wtf"})
+    except:
+        return jsonify({"status": "failure", "message": "connexion failed"})
+    # if  request.method == 'POST':
+    #     data = request.json
+        
+    #     connection = get_db_connection()
+    #     try:
+    #         with connection.cursor() as cursor:
+    #             sql = '''
+    #                 INSERT INTO DatosExperimento (CONDITION_A, CONDITION_B, GRAPH, timeTaken, Error, controlCondition, timePer)
+    #                 VALUES (%s, %s, %s, %s, %s, %s, %s)
+    #             '''
+    #             cursor.execute(sql, (data['CONDITION_A'], data['CONDITION_B'], data['GRAPH'], data['timeTaken'], data['Error'], data['controlCondition'], data['timePer']))
+    #         connection.commit()
+    #     finally:
+    #         connection.close()
+    #     return jsonify({"status": "success", "message": "Row inserted successfully"})
+    # return jsonify({"status": "success", "message": "wtf"})
 
 @app.route('/testdb')
 def test_db():
